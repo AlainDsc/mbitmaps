@@ -1,5 +1,12 @@
-%yadbmap ;; About: bitmap index store and retrieve
-
+%yadbmap ;install-0.00-2024-06-07T05.01.00.380927829.02.00-630699
+ ; version=6.40
+ ; cuser=adescamp
+ ; ctime=2024-04-05T15:31:10+02:00
+ ; muser=adescamp
+ ; mtime=2024-05-27T10:25:19+02:00
+ ;
+ ; // About: bitmap index store and retrieve
+ltechbeg ; path=/adescamp/bitmap/%yadbmap.m
 %SetInd(PGx,PDindex,PDid,PDbit,PDzip,PDpre) ;
  ;setBitmapIndexValue($value, $bitglo, $term, $idnr, $zip=1, $idpre="-"):
  ;
@@ -20,8 +27,7 @@
  q:$g(@PGx@(PDindex,PDpre,bitsi))=x
  s @PGx@(PDindex,PDpre,bitsi)=x
  q
-
-def %SetBM(PGx,PDid,PDbit,PDzip,PDpre):
+%SetBM(PGx,PDid,PDbit,PDzip,PDpre) ;def
  ;addBitmapset($bitset, $idnr, $zip=1, $idset="-")
  ; $synopsis: add/remove a 'record' to/from a bitmap set
  ;       (a bitmap set is an array of the form:
@@ -40,8 +46,7 @@ def %SetBM(PGx,PDid,PDbit,PDzip,PDpre):
  q:$g(@PGx@(PDpre,bitsi))=x
  s @PGx@(PDpre,bitsi)=x
  q
-
-fn %NextBM(PGx,PDpos,PDpre):
+%NextBM(PGx,PDpos,PDpre) ;fn
  ;nextBitmapsetNode($return, $bitset, $idnr, $idset="-")
  ; $synopsis: get the 'next' record nummer in a bitmap set.
  ; returns the next record number (empty=end-of-the-road)
@@ -55,8 +60,7 @@ fn %NextBM(PGx,PDpos,PDpre):
  i $d(@PGx@(PDpre,bitsi)) s x=$zbitfind($$unzip(@PGx@(PDpre,bitsi)),1,bitp+1) q:x x-2+(bitsi*50000)
  f  s bitsi=$o(@PGx@(PDpre,bitsi)) q:bitsi=""  s x=$zbitfind($$unzip(@PGx@(PDpre,bitsi)),1) q:x
  q $s(bitsi="":"",x:x-2+(bitsi*50000),1:"")
-
-def %GetInd(PGx,PDindex,PDid,PDpre):
+%GetInd(PGx,PDindex,PDid,PDpre) ;def
  ;getBitmapIndexValue($return, $bitglo, $term, $idnr, $idpre="-")
  ; $synopsis: get the index value of a term for an indovidual record in a bitmap index
  ; returns the value 1 or 0
@@ -70,8 +74,7 @@ def %GetInd(PGx,PDindex,PDid,PDpre):
  s bits=$$unzip(@PGx@(PDindex,PDpre,bitsi))
  q:bitp>$zbitlen(bits) 0
  q $zbitget(bits,bitp)
-
-def %GetBmap(PAbmap,PGx,PDindex,PDpat,PDpre):
+%GetBmap(PAbmap,PGx,PDindex,PDpat,PDpre) ;def
  ;getBitmap($bitmap, $bitglo, $term="", $pattern="", $idpre="-")
  ; $synopsis: get the bitmap froma given 'term'
  ; PAbmap: return array of type 'bitmap', Is killed initially.
@@ -101,8 +104,7 @@ def %GetBmap(PAbmap,PGx,PDindex,PDpat,PDpre):
  .. q
  . q
  q
-
-def %GetBmpP(PArray,PGx,PDindex,PDpat,PDkill):
+%GetBmpP(PArray,PGx,PDindex,PDpat,PDkill) ;def
  ;getBitmapIndexPrefixes($array, $bitglo, $term="", $pattern="")
  ; $synopsis: get the defined sets for a given indexed term
  ; PArray: return array, form = (set)=""
@@ -128,8 +130,7 @@ def %GetBmpP(PArray,PGx,PDindex,PDpat,PDkill):
  . s pre="" f  s pre=$O(@PGx@(PDindex,pre)) q:pre=""  s PArray(pre)=""
  . q
  q
-
-def %Nxtid(PAbmap,PDpos):
+%Nxtid(PAbmap,PDpos) ;def
  ;nextBitmapIndexNode($nextidnr, $bitmap, $posidnr)
  ; $synopsis: get the next 'positive' id number within a bitmap array (= where the value=1)
  ; returns an id number or the empty string
@@ -141,8 +142,7 @@ def %Nxtid(PAbmap,PDpos):
  i $d(PAbmap(bitsi)) s x=$zbitfind(PAbmap(bitsi),1,bitp+1) q:x x-2+(bitsi*50000)
  f  s bitsi=$o(PAbmap(bitsi)) q:bitsi=""  s x=$zbitfind(PAbmap(bitsi),1) q:x
  q $s(bitsi="":"",x:x-2+(bitsi*50000),1:"")
-
-def %Max(PAbmap):
+%Max(PAbmap) ;def
  ;getBitmapMax($max, $bitmap)
  ; $synopsis: get the highest number, where there has been filed a value
  ; returns an integer
@@ -152,8 +152,7 @@ def %Max(PAbmap):
  q:bitsi="" 0
  s bitp=$zbitlen(PAbmap(bitsi))
  q bitsi*50000+bitp-1
-
-def %Not(PAbmap,PAbmap1,PDmaxi):
+%Not(PAbmap,PAbmap1,PDmaxi) ;def
  ;notBitmap($bitmap, $bitmapa, $max)
  ; $synopsis: calculate the negation of a bitmap
  ; PAbmap: return bitmap array
@@ -169,8 +168,7 @@ def %Not(PAbmap,PAbmap1,PDmaxi):
  q:'PDmaxi
  f i=0:1:(PDmaxi\50000) i '$d(PAbmap(i)) s PAbmap(i)=$zbitstr(50000,1)
  q
-
-def %CntInd(PGx,PDindex,PDpre):
+%CntInd(PGx,PDindex,PDpre) ;def
  ;getBitmapCount($count, $bitmap, $zipped=0)
  ; $synopsis: get the number of 'hits' from a given index term in a bitmap index
  ; returns an integer
@@ -181,8 +179,7 @@ def %CntInd(PGx,PDindex,PDpre):
  s x=0,i=""
  f  s i=$O(@PGx@(PDindex,PDpre,i)) q:i=""  s x=x+$zbitcount($$unzip(@PGx@(PDindex,PDpre,i)))
  q x
-
-def %Cnt(PAbmap,PDzipped):
+%Cnt(PAbmap,PDzipped) ;def
  ;getBitmapCount($count, $bitmap, $zipped=0)
  ; $synopsis: get the number of positive id's within a bitmap array
  ; returns an integer
@@ -192,8 +189,7 @@ def %Cnt(PAbmap,PDzipped):
  i 'PDzipped s x=0,i="" f  s i=$O(PAbmap(i)) q:i=""  s x=x+$zbitcount(PAbmap(i))
  i PDzipped s x=0,i="" f  s i=$O(PAbmap(i)) q:i=""  s x=x+$zbitcount($$unzip(PAbmap(i)))
  q x
-
-def %And(PAbmap,PAbmap1,PAbmap2):
+%And(PAbmap,PAbmap1,PAbmap2) ;def
  ;andBitmap($bitmap, $bitmapa, $bitmapb)
  ; $synopsis: calculate a bitmap, the AND of 2 bitmaps
  ; PAbmap: return array (bitmap)
@@ -206,8 +202,7 @@ def %And(PAbmap,PAbmap1,PAbmap2):
  . s PAbmap(i)=$zbitand(PAbmap1(i),PAbmap2(i))
  . q
  q
-
-def %AndI(PAbmap,PAbmap2):
+%AndI(PAbmap,PAbmap2) ;def
  ;andBitmapInPlace($bitmap, $bitmapb)
  ; $synopsis: replace a bitmap by the result of an AND of itself with a secone bitmap
  ; PAbmap: call and return array. Bitmap 1
@@ -218,8 +213,7 @@ def %AndI(PAbmap,PAbmap2):
  . s PAbmap(i)=$zbitand(PAbmap(i),PAbmap2(i))
  . q
  q
-
-def %AndNot(PAbmap,PAbmap1,PAbmap2):
+%AndNot(PAbmap,PAbmap1,PAbmap2) ;def
  ;andNotBitmap($bitmap, $bitmapa, $bitmapb)
  ; $synopsis: calculate a bitmap, the AND NOT of 2 bitmaps
  ; PAbmap: return array (bitmap)
@@ -234,8 +228,7 @@ def %AndNot(PAbmap,PAbmap1,PAbmap2):
  . s PAbmap(i)=$zbitand(PAbmap1(i),x)
  . q
  q
-
-def %Or(PAbmap,PAbmap1,PAbmap2):
+%Or(PAbmap,PAbmap1,PAbmap2) ;def
  ;orBitmap($bitmap, $bitmapa, $bitmapb)
  ; $synopsis: calculate a bitmap, the OR of 2 bitmaps
  ; PAbmap: return array (bitmap)
@@ -247,8 +240,7 @@ def %Or(PAbmap,PAbmap1,PAbmap2):
  . s PAbmap(i)=$zbitor(PAbmap1(i),PAbmap2(i))
  . q
  q
-
-def %OrI(PAbmap,PAbmap2):
+%OrI(PAbmap,PAbmap2) ;def
  ;orBitmapInPlace($bitmap, $bitmapb)
  ; $synopsis: replace a bitmap by the result of an OR of itself with a secone bitmap
  ; PAbmap: call and return array. Bitmap 1
@@ -263,8 +255,7 @@ def %OrI(PAbmap,PAbmap2):
  . s PAbmap(i)=PAbmap2(i)
  . q
  q
-
-def %XOr(PAbmap,PAbmap1,PAbmap2):
+%XOr(PAbmap,PAbmap1,PAbmap2) ;def
  ;xorBitmap($bitmap, $bitmapa, $bitmapb)
  ; $synopsis: calculate a bitmap, the XOR of 2 bitmaps
  ; PAbmap: return array (bitmap)
@@ -278,11 +269,9 @@ def %XOr(PAbmap,PAbmap1,PAbmap2):
  . s PAbmap(i)=$zbitxor($zbitor(PAbmap1(i),y),$zbitor(PAbmap2(i),y))
  . q
  q
-
-def max(PDa,PDb):
+max(PDa,PDb) ;def
  q $s(PDa>PDb:PDa,1:PDb)
-
-fn zip(PDstr):
+zip(PDstr) ;fn
  n x,l,res,z
  s res=""
  ;small quantities are treted differently
@@ -296,10 +285,8 @@ fn zip(PDstr):
  s x=$tr($j("",$zbitfind(PDstr,1)\8-1)," ",$c(0))
  i $l(x)<10 q $c(192)_"A"_PDstr
  q $c(192)_"B"_$e(PDstr)_"N"_$$num2bin($l(x))_"A"_$e(PDstr,2+$l(x),$l(PDstr))
-
-def unzip(PDstr):
+unzip(PDstr) ;def
  n x,mode,bstr,bitp,i
-// unzip ook de nieuwe vorm, die met $c(192) begint
  s:$a(PDstr)=192 PDstr=$e(PDstr,2,$l(PDstr))
  s mode=$e(PDstr)
  ;A=as is, tot einde string
@@ -324,15 +311,12 @@ def unzip(PDstr):
  . q
  ;fout
  q PDstr
-
-def bin2num(PDbin):
+bin2num(PDbin) ;def
  n x
  q $a(PDbin)*256+$a(PDbin,2)
-
-def num2bin(PDnum):
+num2bin(PDnum) ;def
  q $c(PDnum\256)_$c(PDnum#256)
-
-def %OutBmap(PAbmap,PDzipped):
+%OutBmap(PAbmap,PDzipped) ;def
  ; $synopsis: show the content of a bitmap array in a readable way
  ;           this entry is only for debug facilities
  ; prints the bitmap on the current device
@@ -356,8 +340,7 @@ def %OutBmap(PAbmap,PDzipped):
  . s pos=next
  . q
  q
-
-def %Stat(PAstat,PGx):
+%Stat(PAstat,PGx) ;def
  ; $synopsis: collect statistics about a given bitmap index global
  ;
  ; PAstat: return array : form = (set,keyword)=number
@@ -388,8 +371,7 @@ def %Stat(PAstat,PGx):
  .. q
  . q
  q
-
-def %SetV(PDbit,PAbmap,PDid):
+%SetV(PDbit,PAbmap,PDid) ;def
  ; $synopsis: set/clear the bitmap value froma given record nr in a bitmap array
  ;
  ; PDbit: bitmap value . 1=on, 0=off
@@ -403,8 +385,7 @@ def %SetV(PDbit,PAbmap,PDid):
  i $zbitcount(bits)=0 k PAbmap(bitsi) q
  s PAbmap(bitsi)=bits
  q
-
-def %GetV(PAbmap,PDid):
+%GetV(PAbmap,PDid) ;def
  ; $synopsis: get the bitmap value of a record nr in a given bitmap array
  ; function returns 1=on, 0=off
  ; PAbmap: name of the (local) bitmap array
@@ -415,3 +396,4 @@ def %GetV(PAbmap,PDid):
  s bits=PAbmap(bitsi)
  q:bitp>$zbitlen(bits) 0
  q $zbitget(bits,bitp)
+ltechend ; path=/adescamp/bitmap/%yadbmap.m
